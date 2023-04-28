@@ -9,7 +9,7 @@ const App = {
     },
 
     state: {
-        currentPlayer: 1,
+        moves: [],
     },
 
     // ES6 syntax shorthand way to define a function property on App object. Placing the event listiner here allows me to control when I initialize the app
@@ -40,7 +40,9 @@ const App = {
                 };
 
                 // Determines which player icon is added to the square
-                const currentPlayer = App.state.currentPlayer;
+                const lastMove = App.state.moves.at(-1);
+                const getOppositePLayer = (playerId) => (playerId === 1 ? 2 : 1);
+                const currentPlayer = App.state.moves.length === 0 ? 1 : getOppositePLayer(lastMove.playerId);
 
                 const icon = document.createElement("i");
 
@@ -50,9 +52,30 @@ const App = {
                     icon.classList.add('fa-solid', 'fa-o', 'turquoise');
                 }
 
-                App.state.currentPlayer = App.state.currentPlayer === 1 ? 2 : 1
+                App.state.moves.push({
+                    squareId: +square.id,
+                    playerId: currentPlayer
+                });
+
+                App.state.currentPlayer = currentPlayer === 1 ? 2 : 1
+
+                console.log(App.state);
+
 
                 square.replaceChildren(icon);
+
+                // Check for winner or tie game
+                const winningPatterns = [
+                    [1, 2, 3],
+                    [4, 5, 6],
+                    [7, 8, 9],
+                    [1, 5, 9],
+                    [3, 5, 7],
+                    [1, 4, 7],
+                    [2, 5, 8],
+                    [3, 6, 9],
+
+                ];
 
 
             });
